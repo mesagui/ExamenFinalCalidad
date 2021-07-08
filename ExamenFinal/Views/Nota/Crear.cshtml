@@ -1,0 +1,57 @@
+﻿@using ExamenFinal.Models
+@model NotaDatos
+
+<div>
+
+    <form action="@Url.Action("Crear")" method="post">
+        @Html.HiddenFor(model => model.TagsIds, new{id= "TagsIds" })
+        <div class="form-group">
+            <label>Titulo</label>
+            @Html.TextBoxFor(model => model.Titulo, new {@class = "form-control"})
+        </div>
+        <div class="form-group">
+            <label>Contenido</label>
+            @Html.TextAreaFor(model => model.Contenido, new {@class = "form-control"})
+        </div>
+        <div class="form-group">
+            <label>Tags:</label>
+            <input type="text" disabled class="form-control" value="" id="tags"/>
+
+            <br />
+            
+            <select id="TagId" class="form-control">
+                <option value="" disabled="" selected="">Seleccionar Tag</option>
+                @foreach (var tag in (List<Tag>) ViewBag.Tags)
+                {
+                    <option value="@tag.TagId">@tag.Nombre</option>
+                }
+            </select>
+
+            <br />
+            
+            <button id="AgregarTag" class="btn btn-outline-secondary" type="button"> <i class="far fa-plus-square"></i> Agregar Tag</button>
+        </div>
+        <button class="btn btn-outline-success" type="submit"> <i class="far fa-save"></i> Guardar</button>
+    </form>
+</div>
+
+@section Scripts {
+<script>
+    $("#AgregarTag").on("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var tag = $("#TagId option:selected");
+        if ($('#tags').val() && $('#tags').val().indexOf(tag.text()) >= 0)
+            return;
+        if ($('#tags').val()) {
+            $('#tags').val($('#tags').val() + "," + tag.text());
+            $('#TagsIds').val($('#TagsIds').val() + "," + $("#TagId").val());
+
+        } else {
+            $('#tags').val(tag.text());
+            $('#TagsIds').val($("#TagId").val());
+        }
+    })
+
+</script>
+}

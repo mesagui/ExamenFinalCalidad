@@ -1,0 +1,66 @@
+﻿@using ExamenFinal.Models
+@model NotaIndex
+
+<br />
+<div class="row">
+    <div class="col-2 bg-light">
+       
+        <h4>Categorias</h4>
+        
+        @foreach (var tag in (List<Tag>) ViewBag.Tags)
+        {
+            <li>
+                <a class="text-secondary" href="@Url.Action("Index", new{TagId=tag.TagId})">@tag.Nombre</a>
+            </li>
+        }
+        
+        <li>
+            <a href="@Url.Action("Index", new{Compartida=true})">Compartidas</a>
+        </li>
+    </div>
+    <div class="col-10">
+        <form action="@Url.Action("Index")" method="get">
+            @Html.HiddenFor(model => model.TagId)
+            @Html.HiddenFor(model => model.Compartida)
+            <div class="row">
+                
+               <div class="col-8">
+                    @Html.TextBoxFor(model => model.BuscarTexto, new { @class = "form-control" })
+                </div>
+                
+               <div class="col-2">
+                   <button type="submit" class="btn btn-outline-secondary"> <i class="fas fa-search"></i> Buscar</button>
+               </div>
+                
+                <div class="col-2">
+                    <button type="submit" class="btn btn-outline-success" asp-action="Crear" > <i class="far fa-sticky-note"></i> Nuevo</button>
+                </div>
+
+            </div>
+            <br />
+            <a class="btn btn-outline-primary" href="@Url.Action("Index")"> <i class="fas fa-list"></i> Listar</a>
+            <br />
+            <br />
+        </form>
+        
+
+        @foreach (var nota in Model.Notas)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@nota.Titulo @(nota.FechaModificacion >= nota.Fecha ? "(Modificado: " + nota.FechaModificacion.ToShortDateString() + ")" : "")</h5>
+                    <p class="card-text">@(@nota.Contenido.Length > 50 ? nota.Contenido.Substring(0, 47) + "..." : nota.Contenido)</p>
+                    <div class="row">
+                        <a class="btn btn-outline-info m-2" href="@Url.Action("Editar", new {id = nota.NotaId})"> <i class="far fa-edit"></i> Editar</a>
+                        <a class="btn btn-outline-danger m-2" href="@Url.Action("Eliminar", new {id = nota.NotaId})"> <i class="far fa-trash-alt"></i> Eliminar</a>
+                        <a class="btn btn-outline-success m-2" href="@Url.Action("Compartir", new {id = nota.NotaId})"> <i class="fas fa-share-alt-square"></i> Compartir</a>
+                    </div>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+
+</div>
+
+
