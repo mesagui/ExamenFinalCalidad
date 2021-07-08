@@ -130,10 +130,19 @@ namespace ExamenFinal.Controllers
 
         private Usuario GetCurrentUser()
         {
-            var claim = HttpContext.User.Claims.FirstOrDefault();
-            return userRepository.FindByUsername(claim.Value);
+            var userName = string.Empty;
+            try
+            {
+                var claim = HttpContext.User.Claims.FirstOrDefault();
+                userName = claim?.Value;
+            }
+            catch (Exception e)
+            {
+
+            }
+            return userRepository.FindByUsername(userName);
         }
-        
+
 
     }
 }
